@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block body %}
+<section class="panel narrow"><p class="eyebrow">CORS / {{ mode }}</p><h1>Pembacaan API lintas origin</h1>
+<p>Dashboard dan API memakai host sama dengan port berbeda. Browser akan menyertakan cookie sesi dummy, lalu menerapkan header CORS pada respons.</p>
+<ol><li><a href="{{ service_url(5133, '/account') }}" target="_blank" rel="noopener">Buka sesi Alice pada API</a>.</li><li>Klik tombol di bawah. Mode rentan memperbolehkan pembacaan data; mode diperbaiki menolak origin dashboard.</li></ol>
+<button type="button" class="button safe" id="cors-fetch" data-api-url="{{ service_url(5133, '/api/' ~ mode ~ '/account') }}">Baca API dengan cookie</button>
+<pre class="trace" id="cors-output" aria-live="polite">Belum ada request.</pre>
+<p class="small">Penolakan CORS membatasi akses JavaScript ke respons, bukan membuktikan request tidak sampai ke server.</p>
+<div class="actions"><a href="/attacker/cors/vulnerable">Mode rentan</a><a href="/attacker/cors/secure">Mode diperbaiki</a><a href="{{ service_url(5133) }}">Kembali ke lab</a></div></section>
+<script src="{{ url_for('static', filename='cors.js') }}" defer></script>
+{% endblock %}

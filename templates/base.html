@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{% block title %}Cyber Security Lab{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="{{ url_for('static', filename='lab.js') }}" defer></script>
+</head>
+<body>
+<header class="topbar"><a class="brand" href="{{ service_url(5100) }}"><span class="brand-mark">[ / ]</span> SECURITY LAB</a><nav class="top-nav" aria-label="Navigasi utama"><a href="{{ service_url(5100) }}">Semua lab</a><a href="{{ service_url(5100, '/learn') }}">Jalur belajar</a></nav><span class="local-badge">● {{ network_label }}</span></header>
+<main>{% block body %}{% endblock %}</main>
+<footer>Flask + {{ db_label }} · Data dummy · Server {{ lab_host }} · Debugger nonaktif</footer>
+</body>
+</html>

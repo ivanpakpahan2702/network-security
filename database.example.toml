@@ -1,0 +1,11 @@
+# Salin menjadi database.local.toml dan isi sesuai server Anda.
+# File lokal diabaikan Git. Jangan membagikan konfigurasi berisi password asli.
+[database]
+backend = "sqlite" # sqlite atau mysql; --db pada command line mendapat prioritas
+
+[mysql]
+host = "127.0.0.1"
+port = 3306
+user = "security_lab"
+password = "" # Atau isi environment SECURITY_LAB_MYSQL_PASSWORD
+prefix = "security_lab" # Membentuk security_lab_dashboard, security_lab_01_sql_injection, dst.

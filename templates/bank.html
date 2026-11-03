@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block title %}Bank dummy · {{ mode }}{% endblock %}
+{% block body %}
+<nav class="breadcrumb"><a href="/">Kembali ke lab CSRF</a> / Bank dummy / {{ mode }}</nav>
+<section class="panel narrow"><p class="eyebrow">SESI KORBAN: ALICE</p><h1>Bank {{ 'rentan' if mode == 'vulnerable' else 'diperbaiki' }}</h1><p class="balance">{{ balance }} <span>unit dummy</span></p><p>Saldo {{ mode }} disimpan terpisah di {{ db_label }}. Ini bukan layanan keuangan.</p>
+{% if result %}<div class="notice"><strong>{{ result.title }}</strong> {{ result.detail }}</div>{% endif %}
+<form method="post" action="/bank/{{ mode }}/transfer"><label for="recipient">Penerima dummy</label><input id="recipient" name="recipient" value="teman-demo" required maxlength="64"><label for="amount">Jumlah (1–1000)</label><input id="amount" name="amount" type="number" min="1" max="1000" value="50" required>{% if mode == 'secure' %}<input type="hidden" name="csrf_token" value="{{ bank_token }}">{% endif %}<button class="button safe" type="submit">Transfer sah dari bank</button></form>
+<div class="link-box"><a href="{{ service_url(5100) }}/attacker/csrf/{{ mode }}" target="_blank" rel="noopener">Buka halaman penyerang port 5100 ↗</a><p class="small">Buka bank ini dulu agar cookie korban tersedia. Halaman penyerang mengirim form tanpa token. Untuk mengulang, kembali ke lab dan reset.</p></div></section>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Jalur belajar · Security Lab{% endblock %}
+{% block body %}
+<section class="hero"><p class="eyebrow">DASAR → MENENGAH → LANJUTAN</p><h1>Belajar konsep.<br><span>Buktikan lewat praktik.</span></h1><p class="lead">12 modul, 48 soal, dan 40 lab. Ikuti urutan ini atau pilih materi sesuai prasyarat. Estimasi waktu adalah panduan; ulangi praktik sampai Anda dapat menjelaskan hasilnya.</p></section>
+<div class="stats"><div><strong>{{ passed_modules }} / {{ modules|length }}</strong><span>Modul lulus kuis ≥75%</span></div><div><strong>48</strong><span>Pertanyaan dengan pembahasan</span></div><div><strong>40</strong><span>Praktik terkait</span></div><div><strong>3</strong><span>Jenjang pembelajaran</span></div></div>
+<div class="notice">Nilai dan catatan terkait cookie browser ini, tersimpan dalam {{ db_label }}, dan tetap tersedia setelah server dimulai ulang. Browser/perangkat berbeda memiliki progres sendiri; menghapus cookie memutus akses ke progres sebelumnya. Ekspor catatan sebelum berpindah perangkat. Tidak ada login peserta atau sinkronisasi akun.</div>
+<div class="actions"><a class="button safe" href="/learn/{{ modules[0].id }}">Mulai dari dasar</a><a class="button subtle" href="/learning-report.md">Unduh laporan belajar</a><a href="/">Eksplorasi seluruh lab</a></div>
+{% for level in levels %}<section class="course-level" id="{{ level|lower }}"><h2>{{ loop.index }}. {{ level }}</h2><div class="lab-grid">
+{% for item in modules if item.level == level %}{% set progress = lesson_progress.get(item.id) %}
+<article class="lab-card"><div class="section-row"><span class="lab-number">{{ '%02d'|format(item.number) }}</span><span class="pill">±{{ item.duration }} MENIT</span></div><h3><a href="/learn/{{ item.id }}">{{ item.title }}</a></h3><p>{{ item.summary }}</p><p class="small">{{ item.lab_numbers|length }} lab terkait · {{ item.questions|length }} soal</p><div class="card-bottom"><a href="/learn/{{ item.id }}">Buka modul →</a><span>{{ 'Nilai terbaik ' ~ progress.best_score ~ '%' if progress else 'Belum diuji' }}</span></div></article>
+{% endfor %}</div></section>{% endfor %}
+<section class="panel learning-note"><h2>Ukuran kemajuan</h2><p>Setelah setiap modul: jelaskan konsep tanpa melihat materi, lakukan praktik normal dan kasus bermasalah, baca kode, lalu catat bukti serta perbaikannya. Kuis otomatis membantu memeriksa pemahaman; tugas dan laporan capstone membutuhkan penilaian argumentasi oleh Anda atau mentor.</p><p>Lab jaringan menggunakan topologi dan log terbatas yang dijelaskan di setiap halaman. Lanjutkan dengan administrasi sistem dan perangkat jaringan di lingkungan terisolasi untuk membangun pengalaman operasional.</p></section>
+{% endblock %}
