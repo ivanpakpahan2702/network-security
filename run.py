@@ -13,6 +13,7 @@ from labcore.services import internal_app
 from labcore.network import access_urls, bind_address, lan_enabled
 from labcore.dbconfig import add_database_arguments, load_settings
 from labcore.database import database_errors
+from server_course import PUBLIC_HOST, with_public_course
 
 
 def main():
@@ -54,7 +55,8 @@ def main():
     try:
         # Bind semua port sebelum menerima request. Konflik port tidak menyisakan lab parsial.
         for host, port, app in applications:
-            servers.append(make_server(host, port + args.port_offset, app, threaded=True))
+            application = with_public_course(app) if port == 5100 else app
+            servers.append(make_server(host, port + args.port_offset, application, threaded=True))
         for server in servers:
             thread = threading.Thread(target=server.serve_forever, daemon=True)
             thread.start()
@@ -64,6 +66,7 @@ def main():
             print(f"  {url}", flush=True)
         backend_label = 'MySQL schema per lab' if settings.backend == 'mysql' else 'SQLite per folder'
         print(f"{len(selected)} lab terpisah | {backend_label} | Ctrl+C untuk berhenti", flush=True)
+        print(f"Portal untuk Host {PUBLIC_HOST} tersedia melalui port {5100 + args.port_offset}.", flush=True)
         print(f"Dashboard/lab bind {args.host}; service SSRF 127.0.0.1:{5199 + args.port_offset}; debugger nonaktif.\n", flush=True)
         while True:
             time.sleep(0.5)

@@ -6,6 +6,43 @@ web/API, password, kriptografi, deteksi, respons insiden, dan arsitektur.
 Setiap lab memiliki folder, kode mode awal/rentan dan mode validasi/perbaikan, serta database sendiri: berkas SQLite atau schema MySQL.
 SQLite tetap tersedia tanpa service database. MySQL/MariaDB dapat dipilih sebagai backend alternatif.
 
+## Ruang Server untuk ivanpakpahan.my.id
+
+Jalankan `start-lab.bat` atau `py run.py`. Saat Cloudflare meneruskan request dengan
+hostname publik `ivanpakpahan.my.id`, port 5100 menyajikan portal belajar dari root.
+Akses melalui IP lokal pada port yang sama tetap membuka dashboard lab.
+Simulasi dan progres kuis berjalan di browser masing-masing pengunjung.
+
+| Domain publik | Service URL di Cloudflare Tunnel |
+| --- | --- |
+| `ivanpakpahan.my.id` | `http://127.0.0.1:5100` |
+
+Di dashboard Cloudflare, buka **Networking → Tunnels**, pilih tunnel yang sudah ada, lalu
+buka **Routes**. Edit rute **Published application** untuk `ivanpakpahan.my.id` atau
+buat rutenya jika belum ada. Gunakan domain tersebut tanpa subdomain dan biarkan kolom path
+kosong agar portal terbuka dari root. Isi **Service URL** sesuai tabel dan biarkan
+**HTTP Host Header** kosong agar hostname publik diteruskan ke origin. Setelah disimpan,
+buka **[https://ivanpakpahan.my.id/](https://ivanpakpahan.my.id/)**. Origin HTTP menggunakan
+loopback pada komputer yang sama dengan `cloudflared`. Petunjuk pengaturan rute tersedia di
+[dokumentasi Cloudflare Tunnel](https://developers.cloudflare.com/tunnel/get-started/).
+
+Untuk memastikan origin siap, jalankan
+`curl.exe -I -H "Host: ivanpakpahan.my.id" http://127.0.0.1:5100/` dan periksa status
+`200 OK` sebelum menguji domain publik. Untuk membuka portal secara lokal dengan launcher
+terpisah berbasis Python standar, jalankan `start-server-course.bat` dan kunjungi
+**http://127.0.0.1:5080/**.
+
+Portal memuat sebelas modul dengan skenario alternatif, diagram beranimasi, penjelasan langkah,
+jejak pesan, dan kuis. Misalnya, buka
+`http://127.0.0.1:5080/#/request-lifecycle/4` untuk langsung melihat pengiriman request HTTP, atau
+`http://127.0.0.1:5080/#/load-balancer/3/failover` untuk melihat pemilihan backend setelah health check gagal.
+
+Bagian **Praktik infrastruktur** menggabungkan simulasi dengan panduan dan kode yang bisa disalin.
+
+- Instal Docker Desktop, build image Nginx, uji port, dan gunakan Docker Compose. [Tutorial Docker](https://ivanpakpahan.my.id/#/docker/panduan)
+- Instal Proxmox VE, buat VM Debian, sambungkan VM ke LAN, lalu sajikan HTML dengan Nginx. [Tutorial Proxmox](https://ivanpakpahan.my.id/#/proxmox/panduan)
+- Siapkan HTML dan CSS, terbitkan via Cloudflare Pages atau Tunnel, lalu uji dari jaringan lain. [Tutorial hosting HTML](https://ivanpakpahan.my.id/#/hosting/panduan)
+
 ## Mulai menggunakan
 
 Dari `C:\xampp\htdocs\network-security`, jalankan:

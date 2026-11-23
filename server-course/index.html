@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Pelajari arsitektur server lewat simulasi interaktif HTTP, DNS, Cloudflare Tunnel, Docker, load balancing, cache, dan database.">
+  <meta name="theme-color" content="#101321">
+  <title>Ruang Server — Belajar Infrastruktur Web</title>
+  <link rel="stylesheet" href="./course.css">
+  <script src="./lessons.js" defer></script>
+  <script src="./course.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Lewati ke materi</a>
+  <div class="shell">
+    <aside class="sidebar">
+      <a class="brand" href="#/request-lifecycle/1">
+        <span class="brand-icon" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span><strong>Ruang Server</strong><small>Infrastruktur web</small></span>
+      </a>
+      <details class="course-menu" open>
+        <summary>Daftar materi</summary>
+        <nav id="course-nav" aria-label="Daftar materi"></nav>
+      </details>
+      <div class="course-progress">
+        <label for="course-progress">Progres belajar</label>
+        <progress id="course-progress" max="1" value="0"></progress>
+        <span id="course-progress-text"></span>
+      </div>
+    </aside>
+    <main id="main" class="main" tabindex="-1">
+      <header class="lesson-header">
+        <div class="header-meta">
+          <p id="topic-group"></p>
+          <span class="mode"><i aria-hidden="true"></i> Simulasi interaktif</span>
+        </div>
+        <h1 id="lesson-title">Dari request ke response</h1>
+        <p id="lesson-intro">Ikuti perjalanan satu permintaan web, mulai dari browser sampai respons kembali ke layar.</p>
+        <a class="control practice-link" id="practice-link" hidden>Buka panduan praktik</a>
+      </header>
+      <noscript><p class="no-script">Aktifkan JavaScript untuk menjalankan simulasi dan kuis.</p></noscript>
+      <section class="simulator" aria-label="Simulasi">
+        <div class="sim-header">
+          <div class="scenario">
+            <label for="scenario-select">Skenario</label>
+            <div class="select-wrap"><select id="scenario-select"></select></div>
+          </div>
+          <label class="speed-control">Kecepatan
+            <span class="select-wrap"><select id="speed">
+              <option value="0.5">0,5×</option>
+              <option value="1" selected>1×</option>
+              <option value="2">2×</option>
+            </select></span>
+          </label>
+        </div>
+        <div id="diagram" class="diagram" role="group" aria-label="Peta komponen">
+          <canvas id="connections" aria-hidden="true"></canvas>
+          <div id="nodes" class="nodes"></div>
+          <span id="packet" class="packet" aria-hidden="true" hidden></span>
+          <div class="legend" aria-hidden="true">
+            <span><i></i>Request / proses</span>
+            <span><i></i>Response</span>
+            <span><i></i>Gangguan</span>
+          </div>
+        </div>
+        <div class="transport">
+          <button id="back" type="button" class="control" aria-label="Langkah sebelumnya" title="Langkah sebelumnya"><i class="icon back-icon" aria-hidden="true"></i><span>Sebelumnya</span></button>
+          <button id="play" type="button" class="control primary"><i class="icon play-icon" aria-hidden="true"></i><span>Putar</span></button>
+          <button id="next" type="button" class="control" aria-label="Langkah berikutnya" title="Langkah berikutnya"><span>Berikutnya</span><i class="icon next-icon" aria-hidden="true"></i></button>
+          <button id="reset" type="button" class="control reset" aria-label="Ulang dari awal" title="Ulang dari awal"><i class="icon reset-icon" aria-hidden="true">↻</i><span>Ulang</span></button>
+        </div>
+      </section>
+      <section class="step-panel" aria-labelledby="step-title">
+        <div class="step-copy" aria-live="polite">
+          <p class="step-count" id="step-count"></p>
+          <h2 id="step-title"></h2>
+          <p id="step-description"></p>
+        </div>
+        <div class="event" aria-label="Jejak simulasi">
+          <div class="event-header"><span id="event-label"></span><span id="latency"></span></div>
+          <p id="event-route" class="event-route"></p>
+          <pre><code id="event-detail"></code></pre>
+        </div>
+        <nav id="timeline" class="timeline" aria-label="Langkah simulasi"></nav>
+      </section>
+      <section class="reading practice" id="practice" aria-labelledby="practice-title" hidden>
+        <h2 id="practice-title" tabindex="-1"></h2>
+        <p id="practice-outcome"></p>
+        <div class="practice-requirements">
+          <h3>Yang perlu disiapkan</h3>
+          <p id="practice-requirements"></p>
+        </div>
+        <div id="practice-chapters"></div>
+        <nav id="practice-related" class="references" aria-label="Panduan terkait" hidden></nav>
+        <div id="practice-references" class="references" aria-label="Dokumentasi resmi"></div>
+        <p id="copy-status" class="copy-status" role="status"></p>
+      </section>
+      <div class="reading-grid">
+        <section class="reading" aria-labelledby="inspect-title">
+          <h2 id="inspect-title">Komponen</h2>
+          <p id="inspect-hint">Pilih komponen pada diagram untuk melihat perannya.</p>
+          <div id="inspector" aria-live="polite"></div>
+        </section>
+        <section class="reading" aria-labelledby="terms-title">
+          <h2 id="terms-title">Istilah penting</h2>
+          <dl id="terms"></dl>
+          <div id="references" class="references"></div>
+        </section>
+      </div>
+      <section class="reading quiz" aria-labelledby="quiz-title">
+        <h2 id="quiz-title">Cek pemahaman</h2>
+        <fieldset id="quiz-options"><legend id="quiz-question"></legend></fieldset>
+        <button class="control primary" id="quiz-check" type="button">Periksa jawaban</button>
+        <p id="quiz-feedback" role="status" hidden></p>
+      </section>
+      <footer class="lesson-footer">
+        <a id="previous-lesson" class="control" hidden></a>
+        <a id="next-lesson" class="control" hidden></a>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>
